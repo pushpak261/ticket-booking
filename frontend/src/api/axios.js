@@ -4,8 +4,13 @@ import axios from 'axios';
  * Axios instance pre-configured with base URL.
  * Automatically attaches Bearer token from localStorage to all requests.
  */
+const getBaseURL = () => {
+  // Use backend URL from environment variable or default to relative path
+  return import.meta.env.VITE_BACKEND_URL || '/api';
+};
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: getBaseURL(),
   headers: {
     'Content-Type': 'application/json',
   },
