@@ -105,8 +105,8 @@ npm run dev
 
 | Role  | Email                   | Password     |
 |-------|------------------------|--------------|
-| Admin | admin@cinebook.com     | admin123     |
-| User  | john@example.com       | password123  |
+| Admin | pushpakadmin@gmail.com     | Pushpak@123!     |
+| User  | pushpakuser@gmail.com       | Pushpak@123!  |
 
 ---
 
