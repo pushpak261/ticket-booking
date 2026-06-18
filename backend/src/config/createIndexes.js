@@ -22,8 +22,8 @@ const createIndexSafe = async (collection, indexSpec, options = {}) => {
     await collection.createIndex(indexSpec, options);
     return true;
   } catch (error) {
-    // Ignore "already exists" errors
-    if (error.code === 85 || error.message.includes('already exists')) {
+    // Ignore "already exists" errors (code 85 or index name conflict)
+    if (error.code === 85 || error.message.includes('same name as the requested index') || error.message.includes('already exists')) {
       return false;  // Index already exists
     }
     throw error;  // Re-throw other errors
