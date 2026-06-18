@@ -15,78 +15,94 @@ const Showtime = require('../models/Showtime');
 const Booking = require('../models/Booking');
 
 /**
+ * Helper function to create index with error handling
+ */
+const createIndexSafe = async (collection, indexSpec, options = {}) => {
+  try {
+    await collection.createIndex(indexSpec, options);
+    return true;
+  } catch (error) {
+    // Ignore "already exists" errors
+    if (error.code === 85 || error.message.includes('already exists')) {
+      return false;  // Index already exists
+    }
+    throw error;  // Re-throw other errors
+  }
+};
+
+/**
  * Create all indexes for optimal performance
  */
 const createAllIndexes = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
+      maxPoolSize: 10,
+      minPoolSize: 5,
     });
 
     console.log('\n📚 Creating indexes...\n');
 
     // ─── USER INDEXES ───────────────────────────────────────────────────────
     console.log('👤 User Indexes:');
-    await User.collection.createIndex({ email: 1 }, { unique: true, sparse: true });
+    await createIndexSafe(User.collection, { email: 1 }, { unique: true, sparse: true });
     console.log('  ✅ email (unique, sparse)');
-    await User.collection.createIndex({ role: 1 });
+    await createIndexSafe(User.collection, { role: 1 });
     console.log('  ✅ role');
 
     // ─── MOVIE INDEXES ──────────────────────────────────────────────────────
     console.log('\n🎬 Movie Indexes:');
-    await Movie.collection.createIndex({ title: 'text', description: 'text' });
+    await createIndexSafe(Movie.collection, { title: 'text', description: 'text' });
     console.log('  ✅ title, description (text index)');
-    await Movie.collection.createIndex({ status: 1 });
+    await createIndexSafe(Movie.collection, { status: 1 });
     console.log('  ✅ status');
-    await Movie.collection.createIndex({ genre: 1 });
+    await createIndexSafe(Movie.collection, { genre: 1 });
     console.log('  ✅ genre');
-    await Movie.collection.createIndex({ language: 1 });
+    await createIndexSafe(Movie.collection, { language: 1 });
     console.log('  ✅ language');
-    await Movie.collection.createIndex({ status: 1, releaseDate: -1 });
+    await createIndexSafe(Movie.collection, { status: 1, releaseDate: -1 });
     console.log('  ✅ status, releaseDate (compound)');
-    await Movie.collection.createIndex({ rating: -1 });
+    await createIndexSafe(Movie.collection, { rating: -1 });
     console.log('  ✅ rating (descending)');
 
     // ─── THEATER INDEXES ────────────────────────────────────────────────────
     console.log('\n🎪 Theater Indexes:');
-    await Theater.collection.createIndex({ city: 1 });
+    await createIndexSafe(Theater.collection, { city: 1 });
     console.log('  ✅ city');
-    await Theater.collection.createIndex({ name: 1 });
+    await createIndexSafe(Theater.collection, { name: 1 });
     console.log('  ✅ name');
-    await Theater.collection.createIndex({ city: 1, name: 1 });
+    await createIndexSafe(Theater.collection, { city: 1, name: 1 });
     console.log('  ✅ city, name (compound)');
 
     // ─── SHOWTIME INDEXES ───────────────────────────────────────────────────
     console.log('\n⏰ Showtime Indexes:');
-    await Showtime.collection.createIndex({ movie: 1 });
+    await createIndexSafe(Showtime.collection, { movie: 1 });
     console.log('  ✅ movie');
-    await Showtime.collection.createIndex({ theater: 1 });
+    await createIndexSafe(Showtime.collection, { theater: 1 });
     console.log('  ✅ theater');
-    await Showtime.collection.createIndex({ date: 1 });
+    await createIndexSafe(Showtime.collection, { date: 1 });
     console.log('  ✅ date');
-    await Showtime.collection.createIndex({ isActive: 1 });
+    await createIndexSafe(Showtime.collection, { isActive: 1 });
     console.log('  ✅ isActive');
-    await Showtime.collection.createIndex({ isActive: 1, movie: 1, date: 1 });
+    await createIndexSafe(Showtime.collection, { isActive: 1, movie: 1, date: 1 });
     console.log('  ✅ isActive, movie, date (compound)');
-    await Showtime.collection.createIndex({ isActive: 1, theater: 1, date: 1 });
+    await createIndexSafe(Showtime.collection, { isActive: 1, theater: 1, date: 1 });
     console.log('  ✅ isActive, theater, date (compound)');
-    await Showtime.collection.createIndex({ date: 1, startTime: 1 });
+    await createIndexSafe(Showtime.collection, { date: 1, startTime: 1 });
     console.log('  ✅ date, startTime (compound)');
 
     // ─── BOOKING INDEXES ────────────────────────────────────────────────────
     console.log('\n🎫 Booking Indexes:');
-    await Booking.collection.createIndex({ user: 1 });
+    await createIndexSafe(Booking.collection, { user: 1 });
     console.log('  ✅ user');
-    await Booking.collection.createIndex({ showtime: 1 });
+    await createIndexSafe(Booking.collection, { showtime: 1 });
     console.log('  ✅ showtime');
-    await Booking.collection.createIndex({ user: 1, createdAt: -1 });
+    await createIndexSafe(Booking.collection, { user: 1, createdAt: -1 });
     console.log('  ✅ user, createdAt (compound)');
-    await Booking.collection.createIndex({ status: 1 });
+    await createIndexSafe(Booking.collection, { status: 1 });
     console.log('  ✅ status');
-    await Booking.collection.createIndex({ bookingId: 1 }, { unique: true });
+    await createIndexSafe(Booking.collection, { bookingId: 1 }, { unique: true });
     console.log('  ✅ bookingId (unique)');
-    await Booking.collection.createIndex({ status: 1, createdAt: -1 });
+    await createIndexSafe(Booking.collection, { status: 1, createdAt: -1 });
     console.log('  ✅ status, createdAt (compound)');
 
     console.log('\n✅ All indexes created successfully!\n');

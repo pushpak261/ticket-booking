@@ -59,8 +59,6 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 };
 
 // ─── Indexes for performance ─────────────────────────────────────────────────
-// ✅ Email unique index for fast login/registration
-userSchema.index({ email: 1 }, { unique: true, sparse: true });
 // ✅ Role index for admin queries
 userSchema.index({ role: 1 });
 

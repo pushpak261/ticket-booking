@@ -21,10 +21,6 @@ const connectDB = async () => {
       retryWrites: true,
       retryReads: true,
       w: 'majority',
-      
-      // ✅ Performance
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
     });
 
     console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
