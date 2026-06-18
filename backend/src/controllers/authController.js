@@ -8,7 +8,7 @@ const { sendTokenResponse } = require('../utils/jwt');
  */
 const register = async (req, res, next) => {
   try {
-    const { name, email, password, phone } = req.body;
+    const { name, email, password, phone, role = 'user' } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -20,7 +20,7 @@ const register = async (req, res, next) => {
     }
 
     // Create new user (password hashed via pre-save middleware)
-    const user = await User.create({ name, email, password, phone });
+    const user = await User.create({ name, email, password, phone, role });
 
     sendTokenResponse(res, 201, user);
   } catch (error) {

@@ -8,7 +8,13 @@ import './AuthPage.css';
 const RegisterPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [formData, setFormData] = useState({ name: '', email: '', password: '', phone: '' });
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    phone: '',
+    role: 'user',
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -30,7 +36,7 @@ const RegisterPage = () => {
       const res = await authService.register(formData);
       login(res.data);
       toast.success(`Account created! Welcome, ${res.data.user.name}! 🎉`);
-      navigate('/');
+      navigate(res.data.user.role === 'admin' ? '/admin' : '/');
     } catch (err) {
       setError(err.message || 'Registration failed. Please try again.');
     } finally {
@@ -59,7 +65,7 @@ const RegisterPage = () => {
                 type="text"
                 name="name"
                 className="form-input"
-                placeholder="John Doe"
+                placeholder="Pushpak"
                 value={formData.name}
                 onChange={handleChange}
                 required
@@ -74,7 +80,7 @@ const RegisterPage = () => {
                 type="email"
                 name="email"
                 className="form-input"
-                placeholder="john@example.com"
+                placeholder="pushpak@gmail.com"
                 value={formData.email}
                 onChange={handleChange}
                 required
@@ -94,6 +100,21 @@ const RegisterPage = () => {
                 onChange={handleChange}
                 autoComplete="tel"
               />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label" htmlFor="reg-role">Account Type</label>
+              <select
+                id="reg-role"
+                name="role"
+                className="form-input"
+                value={formData.role}
+                onChange={handleChange}
+                required
+              >
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+              </select>
             </div>
 
             <div className="form-group">
