@@ -1,0 +1,188 @@
+.confirmation-page {
+  padding-top: calc(var(--navbar-height) + var(--spacing-2xl));
+  padding-bottom: var(--spacing-3xl);
+}
+
+/* ─── Success Banner ──────────────────────────────────────────────────────── */
+.confirmation-banner {
+  text-align: center;
+  padding: var(--spacing-2xl) 0;
+}
+
+.confirmation-banner__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(29, 185, 84, 0.15);
+  border: 2px solid rgba(29, 185, 84, 0.4);
+  color: var(--color-green);
+  margin-bottom: var(--spacing-lg);
+  animation: successPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes successPop {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.confirmation-banner__title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.confirmation-banner__desc {
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+}
+
+/* ─── Ticket Card ─────────────────────────────────────────────────────────── */
+.ticket-card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  max-width: 800px;
+  margin: 0 auto var(--spacing-2xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.ticket-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: var(--spacing-xl);
+  background: linear-gradient(135deg, rgba(229, 9, 20, 0.12) 0%, rgba(139, 92, 246, 0.06) 100%);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.ticket-card__label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+}
+
+.ticket-card__booking-id {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--color-primary-light);
+  letter-spacing: 0.1em;
+}
+
+.text-right { text-align: right; }
+
+/* ─── Perforation ─────────────────────────────────────────────────────────── */
+.ticket-card__perforation {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.ticket-card__hole {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.ticket-card__hole--left { margin-left: -12px; }
+.ticket-card__hole--right { margin-right: -12px; }
+
+.ticket-card__dashed {
+  flex: 1;
+  border-top: 2px dashed var(--color-border);
+  margin: 0 var(--spacing-sm);
+}
+
+/* ─── Ticket Body ─────────────────────────────────────────────────────────── */
+.ticket-card__body {
+  padding: var(--spacing-xl);
+}
+
+.ticket-card__movie {
+  display: flex;
+  gap: var(--spacing-xl);
+}
+
+.ticket-card__poster-wrap {
+  flex-shrink: 0;
+}
+
+.ticket-card__poster {
+  width: 120px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  aspect-ratio: 2/3;
+}
+
+.ticket-card__details {
+  flex: 1;
+}
+
+.ticket-card__movie-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-lg);
+}
+
+.ticket-card__info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.ticket-card__info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ticket-card__info-item strong {
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+}
+
+.ticket-card__sub {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.ticket-card__price {
+  font-size: 1.2rem !important;
+  color: var(--color-primary) !important;
+}
+
+.ticket-card__booked-at {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border);
+}
+
+/* ─── Actions ─────────────────────────────────────────────────────────────── */
+.confirmation-actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 600px) {
+  .ticket-card__movie { flex-direction: column; }
+  .ticket-card__info-grid { grid-template-columns: 1fr; }
+  .ticket-card__poster { width: 100px; }
+}
