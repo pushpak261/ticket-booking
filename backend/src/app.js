@@ -10,16 +10,19 @@ const showtimeRoutes = require('./routes/showtimeRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 
-// Error handler middleware
+// Middleware imports
 const { errorHandler, notFound } = require('./middleware/errorHandler');
+const getCorsOptions = require('./middleware/corsConfig');
+const securityHeaders = require('./middleware/securityHeaders');
 
 const app = express();
 
 // ─── Global Middleware ────────────────────────────────────────────────────────
-app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
-  credentials: true,
-}));
+// Security headers
+app.use(securityHeaders);
+
+// CORS with environment-specific configuration
+app.use(cors(getCorsOptions()));
 
 app.use(express.json());           // Parse JSON request bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
