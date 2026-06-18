@@ -185,7 +185,7 @@
 
 /* ─── Features Section ────────────────────────────────────────────────────── */
 .features-section {
-  padding: var(--spacing-3xl) 0;
+  padding: var(--spacing-3xl) 0 var(--spacing-lg);
 }
 
 .text-center {
@@ -249,7 +249,7 @@
 
 /* ─── CTA Section ─────────────────────────────────────────────────────────── */
 .cta-section {
-  padding: var(--spacing-3xl) 0;
+  padding: 0 0 var(--spacing-3xl);
 }
 
 .cta-card {
