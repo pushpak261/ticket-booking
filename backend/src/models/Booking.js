@@ -76,4 +76,12 @@ bookingSchema.pre('save', function (next) {
   next();
 });
 
+// ✅ Indexes for optimal performance
+bookingSchema.index({ user: 1 });
+bookingSchema.index({ showtime: 1 });
+bookingSchema.index({ user: 1, createdAt: -1 });
+bookingSchema.index({ status: 1 });
+bookingSchema.index({ bookingId: 1 }, { unique: true });
+bookingSchema.index({ status: 1, createdAt: -1 });
+
 module.exports = mongoose.model('Booking', bookingSchema);

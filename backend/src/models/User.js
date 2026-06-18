@@ -58,4 +58,10 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
+// ─── Indexes for performance ─────────────────────────────────────────────────
+// ✅ Email unique index for fast login/registration
+userSchema.index({ email: 1 }, { unique: true, sparse: true });
+// ✅ Role index for admin queries
+userSchema.index({ role: 1 });
+
 module.exports = mongoose.model('User', userSchema);

@@ -4,35 +4,50 @@ const Movie = require('../models/Movie');
  * @desc    Get all movies (with optional filters)
  * @route   GET /api/movies
  * @access  Public
+ * 
+ * ✅ OPTIMIZED: Text search with index, cursor-based pagination
  */
 const getMovies = async (req, res, next) => {
   try {
-    const { status, genre, language, search, page = 1, limit = 12 } = req.query;
+    const { status, genre, language, search, limit = 12, cursor = null } = req.query;
 
     // Build dynamic filter object
     const filter = {};
     if (status) filter.status = status;
     if (language) filter.language = language;
     if (genre) filter.genre = { $in: [genre] };
+    
+    // ✅ OPTIMIZATION #1: Use $text search instead of $regex
+    // Text index provides O(log n) performance instead of O(n)
     if (search) {
-      filter.$or = [
-        { title: { $regex: search, $options: 'i' } },
-        { description: { $regex: search, $options: 'i' } },
-      ];
+      filter.$text = { $search: search };
     }
 
-    const skip = (Number(page) - 1) * Number(limit);
-    const total = await Movie.countDocuments(filter);
+    // ✅ OPTIMIZATION #2: Cursor-based pagination (O(1) instead of O(skip))
+    if (cursor) {
+      filter._id = { $gt: cursor };  // Direct seek to position
+    }
+
+    const limitNum = Math.min(Number(limit), 100);  // Max 100 results
     const movies = await Movie.find(filter)
-      .sort({ releaseDate: -1 })
-      .skip(skip)
-      .limit(Number(limit));
+      .sort(search 
+        ? { score: { $meta: 'textScore' }, _id: 1 }  // Text relevance score
+        : { releaseDate: -1, _id: 1 }
+      )
+      .limit(limitNum + 1);  // +1 to detect if there's next page
+
+    // Check if there are more results
+    const hasMore = movies.length > limitNum;
+    if (hasMore) movies.pop();
+
+    // Get next cursor from last movie
+    const nextCursor = movies.length > 0 ? movies[movies.length - 1]._id : null;
 
     res.status(200).json({
       success: true,
-      total,
-      page: Number(page),
-      pages: Math.ceil(total / Number(limit)),
+      count: movies.length,
+      hasMore,
+      nextCursor,
       data: movies,
     });
   } catch (error) {

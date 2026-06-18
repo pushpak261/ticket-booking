@@ -65,4 +65,13 @@ showtimeSchema.virtual('availableSeats').get(function () {
 showtimeSchema.set('toJSON', { virtuals: true });
 showtimeSchema.set('toObject', { virtuals: true });
 
+// ✅ Indexes for optimal performance
+showtimeSchema.index({ movie: 1 });
+showtimeSchema.index({ theater: 1 });
+showtimeSchema.index({ date: 1 });
+showtimeSchema.index({ isActive: 1 });
+showtimeSchema.index({ isActive: 1, movie: 1, date: 1 });
+showtimeSchema.index({ isActive: 1, theater: 1, date: 1 });
+showtimeSchema.index({ date: 1, startTime: 1 });
+
 module.exports = mongoose.model('Showtime', showtimeSchema);

@@ -46,4 +46,9 @@ const theaterSchema = new mongoose.Schema(
   }
 );
 
+// ✅ Indexes for optimal performance
+theaterSchema.index({ city: 1 });
+theaterSchema.index({ name: 1 });
+theaterSchema.index({ city: 1, name: 1 });
+
 module.exports = mongoose.model('Theater', theaterSchema);

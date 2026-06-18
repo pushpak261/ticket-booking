@@ -77,4 +77,11 @@ const movieSchema = new mongoose.Schema(
 // Text index for search functionality
 movieSchema.index({ title: 'text', description: 'text' });
 
+// ✅ Additional indexes for common queries
+movieSchema.index({ status: 1 });
+movieSchema.index({ genre: 1 });
+movieSchema.index({ language: 1 });
+movieSchema.index({ status: 1, releaseDate: -1 });
+movieSchema.index({ rating: -1 });
+
 module.exports = mongoose.model('Movie', movieSchema);

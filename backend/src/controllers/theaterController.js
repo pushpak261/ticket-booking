@@ -1,4 +1,5 @@
 const Theater = require('../models/Theater');
+const cache = require('../utils/cacheService');
 
 /**
  * @desc    Get all theaters (optionally filter by city)
@@ -45,6 +46,10 @@ const getTheaterById = async (req, res, next) => {
 const createTheater = async (req, res, next) => {
   try {
     const theater = await Theater.create(req.body);
+    
+    // ✅ OPTIMIZATION: Invalidate cities cache when new theater is added
+    cache.invalidate('all_cities');
+    
     res.status(201).json({ success: true, data: theater });
   } catch (error) {
     next(error);
@@ -55,11 +60,26 @@ const createTheater = async (req, res, next) => {
  * @desc    Get list of unique cities that have theaters
  * @route   GET /api/theaters/cities
  * @access  Public
+ * 
+ * ✅ OPTIMIZED: In-memory caching with 5-minute TTL
  */
 const getCities = async (req, res, next) => {
   try {
-    const cities = await Theater.distinct('city');
-    res.status(200).json({ success: true, data: cities.sort() });
+    const CACHE_KEY = 'all_cities';
+    
+    // Check cache first: O(1)
+    let cities = cache.get(CACHE_KEY);
+    
+    if (!cities) {
+      // Query database only if not cached: O(n)
+      cities = await Theater.distinct('city');
+      cities.sort();
+      
+      // Store in cache for 5 minutes (300000 ms)
+      cache.set(CACHE_KEY, cities, 300000);
+    }
+    
+    res.status(200).json({ success: true, data: cities });
   } catch (error) {
     next(error);
   }
