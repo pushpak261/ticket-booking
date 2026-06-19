@@ -57,7 +57,7 @@ const LoginPage = () => {
                 type="email"
                 name="email"
                 className="form-input"
-                placeholder="pushpakuser@gmail."
+                placeholder="pushpakuser@gmail.com"
                 value={formData.email}
                 onChange={handleChange}
                 required
