@@ -57,7 +57,7 @@ const LoginPage = () => {
                 type="email"
                 name="email"
                 className="form-input"
-                placeholder="john@example.com"
+                placeholder="pushpakuser@gmail."
                 value={formData.email}
                 onChange={handleChange}
                 required
@@ -97,8 +97,8 @@ const LoginPage = () => {
           {/* Demo credentials hint */}
           <div className="auth-demo">
             <p className="auth-demo__title">Demo Credentials</p>
-            <p className="auth-demo__item">👤 User: <code>john@example.com</code> / <code>password123</code></p>
-            <p className="auth-demo__item">⚙️ Admin: <code>admin@cinebook.com</code> / <code>admin123</code></p>
+            <p className="auth-demo__item">👤 User: <code>pushpakuser@gmail.com</code> / <code>Pushpak@123!</code></p>
+            <p className="auth-demo__item">⚙️ Admin: <code>pushpakadmin@gmail.com</code> / <code>Pushpak@123!</code></p>
           </div>
 
           <div className="auth-card__footer">
